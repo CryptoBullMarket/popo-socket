@@ -8,7 +8,7 @@ import sched
 import json
 
 
-strategyList = {}
+strategyDict = {}
 scheduler = sched.scheduler(time, sleep)
 
 class PopoServer(Thread):
@@ -30,12 +30,32 @@ class PopoServer(Thread):
         print("Client(%d) said: %s" % (client['id'], message))
 
     def broadcast(self):
-        self.server.send_message_to_all(json.dumps(strategyList))
+        strategyList = []
+        self.format(strategyList)
+        self.all = self.server.send_message_to_all(json.dumps(strategyList))
 
+    def format(self, strategyList):
+        for key, value in strategyDict.items():
+            strategy = {}
+            data = []
+            strategy[id.name] = key
+            for i in range(0,len(value)):
+                dataInner = {}
+                for key2, value2 in value[i].items():
+                    coinKey = key2.split(':')
+                    time_frame = coinKey[1]
+                    coin = coinKey[2][1:]
+                    dataInner[id.time] = time_frame
+                    dataInner[id.From] = coin[:3]
+                    dataInner[id.to] = coin[3:]
+                    dataInner[id.data] = value2
+                data.append(dataInner)
+            strategy[id.data] = data
+            strategyList.append(strategy)
+        print('done')
 
     def run(self):
-        PORT = 9005
-        self.server = WebsocketServer(PORT)
+        self.server = WebsocketServer(host=constants.server[id.id.host],port=constants.server[id.port])
         self.server.set_fn_new_client(self.new_client)
         self.server.set_fn_client_left(self.client_left)
         self.server.set_fn_message_received(self.message_received)
@@ -56,14 +76,17 @@ class BitfinexClient(Thread):
     def on_message(self, message):
         newMessage = json.loads(message)
 
-        if id.serverId in newMessage:
+        if id.serverId in newMessage or (id.event in newMessage and newMessage[id.event]== id.error):
             print('Ignore')
 
         elif id.chanId in newMessage:
             if newMessage[id.chanId] not in self.channelKeys:
                 self.channelKeys[newMessage[id.chanId]] = newMessage[id.key]
         else:
-            chanId = newMessage[0]
+            try:
+                chanId = newMessage[0]
+            except:
+                print('Error')
             data = newMessage[1]
             if data and type(data) == list:
                 if type(data[0]) == list:
@@ -114,10 +137,10 @@ class BitfinexClient(Thread):
     def update_strategy_list(self, key, strategies):
         for value in strategies:
             strategy = list(value)[0]
-            if strategy not in strategyList:
-                strategyList[strategy] = [{key: value[strategy][id.price_action]}]
+            if strategy not in strategyDict:
+                strategyDict[strategy] = [{key: value[strategy][id.price_action]}]
             else:
-                strategyList[strategy].append({key: value[strategy][id.price_action]})
+                strategyDict[strategy].append({key: value[strategy][id.price_action]})
 
     def run(self):
         websocket.enableTrace(True)
@@ -138,7 +161,7 @@ class StrategyBroadcast(Thread):
 
     def run(self):
         while True:
-            scheduler.enter(id.delay, id.priority, self.popoServer.broadcast)
+            scheduler.enter(constants.scheduler_params[id.delay], constants.scheduler_params[id.priority], self.popoServer.broadcast)
             scheduler.run()
 
 

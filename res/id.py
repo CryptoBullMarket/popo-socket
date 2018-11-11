@@ -29,6 +29,8 @@ window_size = 'window_size'
 price_action = 'price_action'
 trend_strength = 'trend_strength'
 symbols = 'symbols'
+event = 'event'
+error = 'error'
 
 # time frame
 tf_string = 'tf_string'
@@ -57,7 +59,11 @@ From = 'from'
 to = 'to'
 pchane = 'pchange'
 window = 'window'
+data = 'data'
 
 #scheduler params
 delay = 'delay'
 priority = 'priority'
+
+host = 'host'
+port = 'port'

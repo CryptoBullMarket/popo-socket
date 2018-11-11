@@ -1,6 +1,7 @@
 from res import id as id, values as values, constants as constants
 from util import utils as utils
 import handler.database as db
+import pandas as pd
 import numpy as np
 import talib as ta
 
@@ -39,7 +40,11 @@ def check_double_bottom(price_action, indices_minima, obv):
                     break
     return isDoubleBottom
 
-def double_top_double_bottom(key, price_action, time_frame):
+def double_top_double_bottom(key, dataList, time_frame):
+
+    price_action = pd.DataFrame(dataList, columns=[id.time, id.open, id.close, id.high, id.low, id.volume])
+    if price_action.empty:
+        return
 
     window_size = constants.strategy_params[id.window_size]
     # To determine up/down trend and the strength
@@ -69,7 +74,7 @@ def double_top_double_bottom(key, price_action, time_frame):
             return {
                 id.name: id.double_top,
                 id.key: key,
-                id.price_action: price_action.to_dict()
+                id.price_action: dataList
             }
         except:
             print('Unable to add to database')
@@ -80,7 +85,7 @@ def double_top_double_bottom(key, price_action, time_frame):
             return {
                 id.name: id.double_bottom,
                 id.key: key,
-                id.price_action: price_action.to_dict()
+                id.price_action: dataList
             }
         except:
             print('Unable to add to database')

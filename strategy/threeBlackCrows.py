@@ -1,6 +1,7 @@
 from res import id as id, values as values, constants as constants
 import handler.database as db
 from util import utils as utils
+import pandas as pd
 
 # check if the bear candle open between and close lower
 # values of 1 is more recent than 2
@@ -16,7 +17,12 @@ def __small_lower_wick(price):
 
 
 # main strategy call
-def three_black_crows(key, price_action, time_frame):
+def three_black_crows(key, dataList, time_frame):
+
+    price_action = pd.DataFrame(dataList, columns=[id.time, id.open, id.close, id.high, id.low, id.volume])
+    if price_action.empty:
+        return
+
     window_size = constants.strategy_params[id.window_size]
     # crows=check if the last 3 candles are crows
     crows = utils.__is_bear(price_action.iloc[-1][id.open], price_action.iloc[-1][id.close]) \
@@ -41,7 +47,7 @@ def three_black_crows(key, price_action, time_frame):
             return {
                 id.name: id.three_black_crow,
                 id.key: key,
-                id.price_action: price_action.to_dict()
+                id.price_action: dataList
             }
         except:
             print('Unable to add to database')
