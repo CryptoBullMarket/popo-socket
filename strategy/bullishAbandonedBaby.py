@@ -1,8 +1,13 @@
 from res import constants as constants, id as id, values as values
 from util import utils as utils
 import handler.database as db
+import pandas as pd
 
-def bullish_abandoned_baby(key, price_action, time_frame):
+def bullish_abandoned_baby(key, dataList, time_frame):
+
+    price_action = pd.DataFrame(dataList, columns=[id.time, id.open, id.close, id.high, id.low, id.volume])
+    if price_action.empty:
+        return
 
     window_size = constants.strategy_params[id.window_size]
     downTrend = utils.__downtrend(price_action.iloc[-2*window_size - 3:-3][id.close].values,window_size)

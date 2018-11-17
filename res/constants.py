@@ -13,7 +13,10 @@ subscribe = {
     id.ws_subscribe: '"event": "subscribe",  "channel": "candles",  "key": "trade:{}:t{}"'
 }
 
-
+server = {
+    id.host: '0.0.0.0',
+    id.port: 9005
+}
 #history data
 history = {
     id.history_size: 200
