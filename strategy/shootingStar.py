@@ -1,9 +1,14 @@
 from res import constants as constants, id as id, values as values
 from util import utils as utils
 import handler.database as db
+import pandas as pd
 
-def shooting_star(key, price_action, time_frame):
-    window_size = constants.strategy_params.window_size
+def shooting_star(key, dataList, time_frame):
+    price_action = pd.DataFrame(dataList, columns=[id.time, id.open, id.close, id.high, id.low, id.volume])
+    if price_action.empty:
+        return
+
+    window_size = constants.strategy_params[id.window_size]
     uptrend = utils.__uptrend(price_action.iloc[-window_size - 1:-1][id.close].values, window_size)
 
     shooting_star = utils.__is_wick_len(utils.__body(price_action.iloc[-1][id.open], price_action.iloc[-1][id.close]),
@@ -13,4 +18,13 @@ def shooting_star(key, price_action, time_frame):
                     constants.strategy_params[id.small_body_percentage]
 
     if uptrend and shooting_star:
-        db.insert_strategy(key, time_frame, values.shooting_star, price_action.iloc[-1][id.time])
+        try:
+            #db.insert_strategy(key, time_frame, values.shooting_star, price_action.iloc[-1][id.time])
+            return {
+                id.name: id.double_top,
+                id.key: key,
+                id.price_action: dataList
+            }
+        except:
+            print('Unable to add to database')
+            return {}

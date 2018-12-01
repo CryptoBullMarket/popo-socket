@@ -1,4 +1,4 @@
-from strategy import threeBlackCrows as tbc, doubleTopDoubleBottom as dtdb, threeWhiteSoldiers as tws, bullishAbandonedBaby as bab
+from strategy import threeBlackCrows as tbc, doubleTopDoubleBottom as dtdb, threeWhiteSoldiers as tws, bullishAbandonedBaby as bab, eveningStar as es, morningStar as ms, shootingStar as ss
 from res import id as id
 import pandas as pd
 
@@ -26,6 +26,15 @@ def examine_strategies(key, time_frame, data):
     BAB = bab.bullish_abandoned_baby(key, dataList, time_frame)
     if BAB:
         strategyList.append({id.bullish_abandoned_baby: BAB})
+    ES = es.evening_star(key, dataList, time_frame)
+    if ES:
+        strategyList.append({id.evening_star: ES})
+    MS = ms.morning_star(key, dataList, time_frame)
+    if MS:
+        strategyList.append({id.morning_star: MS})
+    SS = ss.shooting_star(key, dataList, time_frame)
+    if SS:
+        strategyList.append({id.shooting_star: SS})
     return strategyList
 
 if __name__ == "__main__":

@@ -78,5 +78,5 @@ def __is_wick_len(body, wick):
 def __star_wick_len(body, wick, param):
     return wick/body >= param
 
-def __small_lower_wick(open, close, low, param):
-    return abs(min(open, close)-low)/__body(open, close) < param
+def __small_lower_wick(open, close, low):
+    return abs(min(open, close)-low)/__body(open, close) < constants.strategy_params[id.wick_percentage]

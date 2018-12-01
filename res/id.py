@@ -42,6 +42,9 @@ double_top = 'Double Top'
 double_bottom = 'Double Bottom'
 three_white_soldiers = 'Three White Soldiers'
 bullish_abandoned_baby = 'Bullish Abandoned Baby'
+evening_star = 'Evening Star'
+morning_star = 'Morning Star'
+shooting_star = 'Shooting Star'
 
 
 # three black crows ids
