@@ -30,5 +30,4 @@ def bullish_abandoned_baby(key, dataList, time_frame):
             }
         except:
             print('Unable to add to database')
-
-    return {}
+            return {}
