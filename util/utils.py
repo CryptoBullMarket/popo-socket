@@ -58,3 +58,25 @@ def __local_min_max(closingPrices):
 
 def percentage_change(price_action):
     return price_action[len(price_action)-1]-price_action[len(price_action)-2]/price_action[len(price_action)-2]
+
+# price can be either open or close, depending upon where the gap is to be checked
+def __is_gap_down(price, open, close):
+    return price < min(open, close)
+
+def __is_gap_up(price, open, close):
+    return price > max(open, close)
+
+def __threshold_up(open, close, price):
+    return (open+close)/2 > price
+
+def __threshold_down(open, close, price):
+    return (open+close)/2 < price
+
+def __is_wick_len(body, wick):
+    return (body/wick) <= 0.5
+
+def __star_wick_len(body, wick, param):
+    return wick/body >= param
+
+def __small_lower_wick(open, close, low, param):
+    return abs(min(open, close)-low)/__body(open, close) < param
