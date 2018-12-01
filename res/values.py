@@ -5,6 +5,9 @@ three_white_soldiers = 'Three White Soldiers'
 double_top = 'Double Top'
 double_bottom = 'Double Bottom'
 bullish_abandoned_baby = 'Bullish Abandoned Baby'
+evening_star = 'Evening Star'
+morning_star = 'Morning Star'
+shooting_star = 'Shooting Star'
 
 # time frame
 time_frame = {
