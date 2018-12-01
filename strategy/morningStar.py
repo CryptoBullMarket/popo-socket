@@ -24,7 +24,7 @@ def morning_star(key, dataList, time_frame):
         try:
             #db.insert_strategy(key, time_frame, values.morning_star, price_action.iloc[-1][id.time])
             return {
-                id.name: id.double_top,
+                id.name: id.morning_star,
                 id.key: key,
                 id.price_action: dataList
             }

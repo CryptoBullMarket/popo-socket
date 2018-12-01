@@ -73,10 +73,14 @@ def __threshold_down(open, close, price):
     return (open+close)/2 < price
 
 def __is_wick_len(body, wick):
-    return (body/wick) <= 0.5
+    if wick > 0:
+        return (body/wick) <= 0.5
+    return True
 
 def __star_wick_len(body, wick, param):
-    return wick/body >= param
+    if body > 0:
+        return wick/body >= param
+    return True
 
 def __small_lower_wick(open, close, low):
     return abs(min(open, close)-low)/__body(open, close) < constants.strategy_params[id.wick_percentage]

@@ -14,7 +14,7 @@ def evening_star(key, dataList, time_frame):
     evening_star = utils.__is_bear(price_action.iloc[-1][id.open], price_action.iloc[-1][id.close]) \
                   and utils.__percentage_change(price_action.iloc[-1][id.open], price_action.iloc[-1][id.close]) > constants.strategy_params[id.body_percentage] \
                   and utils.__is_gap_down(price_action.iloc[-1][id.open], price_action.iloc[-2][id.open], price_action.iloc[-2][id.close]) \
-                  and utils.__percentage_change(price_action.iloc[-2][id.open], price_action.iloc[-2][id.close]) < constants.strategy_params[id.wick_percentage] \
+                  and utils.__percentage_change(price_action.iloc[-2][id.open], price_action.iloc[-2][id.close]) < constants.strategy_params[id.small_body_percentage] \
                   and utils.__is_gap_down(price_action.iloc[-3][id.open], price_action.iloc[-2][id.open], price_action.iloc[-2][id.close]) \
                   and utils.__is_bull(price_action.iloc[-3][id.open], price_action.iloc[-3][id.close]) \
                   and utils.__percentage_change(price_action.iloc[-3][id.open], price_action.iloc[-3][id.close]) > constants.strategy_params[id.body_percentage] \
@@ -24,7 +24,7 @@ def evening_star(key, dataList, time_frame):
         try:
             #db.insert_strategy(key, time_frame, values.evening_star, price_action.iloc[-1][id.time])
             return {
-                id.name: id.double_top,
+                id.name: id.evening_star,
                 id.key: key,
                 id.price_action: dataList
             }

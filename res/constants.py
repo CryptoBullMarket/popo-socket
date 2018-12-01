@@ -38,6 +38,7 @@ strategy_params = {
     id.wick_percentage: 0.5,
     id.trend_strength: 25,
     id.body_percentage: 10,
+    id.small_body_percentage: 0.1,
 }
 
 # database

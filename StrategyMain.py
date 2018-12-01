@@ -1,7 +1,5 @@
 from strategy import threeBlackCrows as tbc, doubleTopDoubleBottom as dtdb, threeWhiteSoldiers as tws, bullishAbandonedBaby as bab, eveningStar as es, morningStar as ms, shootingStar as ss
 from res import id as id
-import pandas as pd
-
 
 def examine_strategies(key, time_frame, data):
     print(key, time_frame)
