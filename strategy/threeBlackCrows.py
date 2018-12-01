@@ -51,7 +51,6 @@ def three_black_crows(key, dataList, time_frame):
             }
         except:
             print('Unable to add to database')
-
-    return {}
+            return {}
 
 

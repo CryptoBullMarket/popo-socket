@@ -20,7 +20,7 @@ def on_message(ws, message):
 if __name__ == "__main__":
     websocket.enableTrace(True)
     try:
-        ws = websocket.WebSocketApp('ws://127.0.0.1:9005',
+        ws = websocket.WebSocketApp('ws://172.31.66.71:9005',
                               on_message = on_message,
                               on_error = on_error,
                               on_close = on_close)

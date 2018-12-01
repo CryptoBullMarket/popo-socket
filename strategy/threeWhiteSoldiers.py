@@ -49,7 +49,5 @@ def three_white_soldiers(key, dataList, time_frame):
             }
         except:
             print('Unable to add to database')
-
-    return {}
-
+            return {}
 

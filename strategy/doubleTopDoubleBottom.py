@@ -78,6 +78,7 @@ def double_top_double_bottom(key, dataList, time_frame):
             }
         except:
             print('Unable to add to database')
+            return {}
 
     if notifier[values.double_bottom]:
         try:
@@ -89,5 +90,4 @@ def double_top_double_bottom(key, dataList, time_frame):
             }
         except:
             print('Unable to add to database')
-
-    return {}
+            return {}

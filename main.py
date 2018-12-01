@@ -17,7 +17,7 @@ class PopoServer(Thread):
     # Called for every client connecting (after handshake)
     def new_client(self, client, server):
         print("New client connected and was given id %d" % client['id'])
-        self.server.send_message_to_all("Hey all, a new client has joined us")
+        #self.server.send_message_to_all("Hey all, a new client has joined us")
 
     # Called for every client disconnecting
     def client_left(self, client, server):
@@ -55,7 +55,7 @@ class PopoServer(Thread):
         print('done')
 
     def run(self):
-        self.server = WebsocketServer(host=constants.server[id.id.host],port=constants.server[id.port])
+        self.server = WebsocketServer(host=constants.server[id.host], port=constants.server[id.port])
         self.server.set_fn_new_client(self.new_client)
         self.server.set_fn_client_left(self.client_left)
         self.server.set_fn_message_received(self.message_received)
