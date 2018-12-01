@@ -22,7 +22,7 @@ def bullish_abandoned_baby(key, dataList, time_frame):
 
     if downTrend and abandonedBaby:
         try:
-            db.insert_strategy(key, time_frame, values.bullish_abandoned_baby, price_action.iloc[-1][id.time])
+            #db.insert_strategy(key, time_frame, values.bullish_abandoned_baby, price_action.iloc[-1][id.time])
             return {
                 id.name: id.bullish_abandoned_baby,
                 id.key: key,

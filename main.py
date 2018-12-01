@@ -135,12 +135,19 @@ class BitfinexClient(Thread):
                 self.ws.send('{' + constants.subscribe[id.ws_subscribe].format(time_frame, key.upper()) + '}')
 
     def update_strategy_list(self, key, strategies):
+        append = True
         for value in strategies:
             strategy = list(value)[0]
             if strategy not in strategyDict:
                 strategyDict[strategy] = [{key: value[strategy][id.price_action]}]
             else:
-                strategyDict[strategy].append({key: value[strategy][id.price_action]})
+                for k in strategyDict[strategy]:
+                    if key in k:
+                        append = False
+                if append:
+                    strategyDict[strategy].append({key: value[strategy][id.price_action]})
+        print('Works')
+
 
     def run(self):
         websocket.enableTrace(True)

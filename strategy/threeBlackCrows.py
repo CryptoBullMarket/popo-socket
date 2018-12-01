@@ -43,7 +43,7 @@ def three_black_crows(key, dataList, time_frame):
     # check strategy
     if trend and crows and lower_wick:
         try:
-            db.insert_strategy(key, time_frame, values.three_black_crow, price_action.iloc[-1][id.time])
+            #db.insert_strategy(key, time_frame, values.three_black_crow, price_action.iloc[-1][id.time])
             return {
                 id.name: id.three_black_crow,
                 id.key: key,

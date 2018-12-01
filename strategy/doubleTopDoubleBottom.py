@@ -70,7 +70,7 @@ def double_top_double_bottom(key, dataList, time_frame):
 
     if notifier[values.double_top]:
         try:
-            db.insert_strategy(key, time_frame, values.double_top, price_action.iloc[-1][id.time])
+            #db.insert_strategy(key, time_frame, values.double_top, price_action.iloc[-1][id.time])
             return {
                 id.name: id.double_top,
                 id.key: key,
@@ -82,7 +82,7 @@ def double_top_double_bottom(key, dataList, time_frame):
 
     if notifier[values.double_bottom]:
         try:
-            db.insert_strategy(key, time_frame, values.double_bottom, price_action.iloc[-1][id.time])
+            #db.insert_strategy(key, time_frame, values.double_bottom, price_action.iloc[-1][id.time])
             return {
                 id.name: id.double_bottom,
                 id.key: key,

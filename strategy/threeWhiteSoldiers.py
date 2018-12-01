@@ -41,7 +41,7 @@ def three_white_soldiers(key, dataList, time_frame):
     # check strategy
     if trend and soldiers and lower_wick:
         try:
-            db.insert_strategy(key, time_frame, values.three_white_soldiers, price_action.iloc[-1][id.time])
+            #db.insert_strategy(key, time_frame, values.three_white_soldiers, price_action.iloc[-1][id.time])
             return {
                 id.name: id.three_white_soldiers,
                 id.key: key,
