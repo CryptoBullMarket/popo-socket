@@ -22,7 +22,7 @@ history = {
     id.history_size: 200
 }
 #time frame
-time_frame = [ '5m', '30m', '1h', '3h', '6h', '12h', '1d' ]
+time_frame = ['5m', '30m', '1h', '3h', '6h', '12h', '1D']
 
 
 # url params
@@ -78,5 +78,4 @@ coinbase = [
     "ctxusd", "ctxbtc", "ctxeth", "paiusd", "paibtc", "seeusd", "seebtc", "seeeth", "essusd", "essbtc", "esseth",
     "atmusd", "atmbtc", "atmeth", "hotusd", "hotbtc", "hoteth", "dtausd", "dtabtc", "dtaeth", "iqxusd", "iqxbtc",
     "iqxeos", "wprusd", "wprbtc", "wpreth", "zilusd", "zilbtc", "zileth", "bntusd", "bntbtc", "bnteth", "absusd",
-    "abseth", "xrausd", "xraeth", "manusd", "maneth", "bbnusd", "bbneth", "niousd", "nioeth", "dgxusd", "dgxeth"
-]
+    "abseth", "xrausd", "xraeth", "manusd", "maneth", "bbnusd", "bbneth", "niousd", "nioeth", "dgxusd", "dgxeth"]

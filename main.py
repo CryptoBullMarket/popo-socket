@@ -13,6 +13,7 @@ scheduler = sched.scheduler(time, sleep)
 
 class PopoServer(Thread):
     clients = {}
+    broadcast_counter = 0
 
     # Called for every client connecting (after handshake)
     def new_client(self, client, server):
@@ -32,6 +33,8 @@ class PopoServer(Thread):
     def broadcast(self):
         strategyList = []
         self.format(strategyList)
+        self.broadcast_counter += 1
+        print('Broadcast number: ', self.broadcast_counter)
         self.all = self.server.send_message_to_all(json.dumps(strategyList))
 
     def format(self, strategyList):
@@ -52,7 +55,7 @@ class PopoServer(Thread):
                 data.append(dataInner)
             strategy[id.data] = data
             strategyList.append(strategy)
-        print('done')
+        #print('done')
 
     def run(self):
         self.server = WebsocketServer(host=constants.server[id.host], port=constants.server[id.port])
@@ -73,11 +76,26 @@ class BitfinexClient(Thread):
         for i in range(0, no_removed):
             del self.candleData[chanId][i]
 
+    def update_strategy_list(self, key, strategies):
+        append = True
+        for value in strategies:
+            strategy = list(value)[0]
+            if strategy not in strategyDict:
+                strategyDict[strategy] = [{key: value[strategy][id.price_action]}]
+            else:
+                for k in strategyDict[strategy]:
+                    if key in k:
+                        append = False
+                if append:
+                    strategyDict[strategy].append({key: value[strategy][id.price_action]})
+        #print('Works')
+
     def on_message(self, message):
         newMessage = json.loads(message)
 
         if id.serverId in newMessage or (id.event in newMessage and newMessage[id.event]== id.error):
-            print('Ignore')
+            #print('Ignore')
+            yo = 'ignore'
 
         elif id.chanId in newMessage:
             if newMessage[id.chanId] not in self.channelKeys:
@@ -133,21 +151,6 @@ class BitfinexClient(Thread):
         for key in constants.coinbase:
             for time_frame in constants.time_frame:
                 self.ws.send('{' + constants.subscribe[id.ws_subscribe].format(time_frame, key.upper()) + '}')
-
-    def update_strategy_list(self, key, strategies):
-        append = True
-        for value in strategies:
-            strategy = list(value)[0]
-            if strategy not in strategyDict:
-                strategyDict[strategy] = [{key: value[strategy][id.price_action]}]
-            else:
-                for k in strategyDict[strategy]:
-                    if key in k:
-                        append = False
-                if append:
-                    strategyDict[strategy].append({key: value[strategy][id.price_action]})
-        print('Works')
-
 
     def run(self):
         websocket.enableTrace(True)
