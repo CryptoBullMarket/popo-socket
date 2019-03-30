@@ -6,6 +6,7 @@ from time import time, sleep
 import websocket
 import sched
 import json
+from flask import Flask, jsonify, Response
 
 
 strategyDict = {}
@@ -69,7 +70,10 @@ class BitfinexClient(Thread):
     channelKeys = {}
     candleData = {}
 
-
+    def __init__(self, ps):
+        ''' Constructor. '''
+        Thread.__init__(self)
+        self.popoServer = ps
 
     def removeStaleData(self, chanId):
         no_removed = len(self.candleData[chanId]) - constants.history[id.history_size]
@@ -88,6 +92,7 @@ class BitfinexClient(Thread):
                         append = False
                 if append:
                     strategyDict[strategy].append({key: value[strategy][id.price_action]})
+        self.popoServer.broadcast()
         #print('Works')
 
     def on_message(self, message):
@@ -174,12 +179,35 @@ class StrategyBroadcast(Thread):
             scheduler.enter(constants.scheduler_params[id.delay], constants.scheduler_params[id.priority], self.popoServer.broadcast)
             scheduler.run()
 
+class EndpointAction(object):
+
+    def __init__(self, action):
+        self.response = Response(status=200, headers={})
+
+    def __call__(self, *args):
+        return jsonify(strategyDict)
+
+
+class FlaskAppWrapper(object):
+    app = None
+
+    def __init__(self, name):
+        self.app = Flask(name)
+
+    def run(self):
+        self.app.run(port= 4000)
+
+    def add_endpoint(self, endpoint=None, endpoint_name=None, handler=None):
+        self.app.add_url_rule(endpoint, endpoint_name, EndpointAction(handler))
 
 if __name__ == "__main__":
 
     ps = PopoServer()
     ps.start()
-    bc = BitfinexClient()
+    bc = BitfinexClient(ps)
     bc.start()
-    sb = StrategyBroadcast(ps)
-    sb.start()
+    a = FlaskAppWrapper('wrap')
+    a.add_endpoint(endpoint='/ad', endpoint_name='ad')
+    a.run()
+    #sb = StrategyBroadcast(ps)
+    #sb.start()

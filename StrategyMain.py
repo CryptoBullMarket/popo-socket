@@ -37,4 +37,5 @@ def examine_strategies(key, time_frame, data):
 
 if __name__ == "__main__":
     #connection.get_symbol_list()
-    examine_strategies('1h')
+    #examine_strategies('1h')
+    print('hi')
