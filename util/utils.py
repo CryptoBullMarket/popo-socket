@@ -16,6 +16,26 @@ def __downtrend(price_action, window_size):
             return False
     return True
 
+def __sma_trend(price_action):
+    sma10 = ta.SMA(price_action, 10)
+    sma20 = ta.SMA(price_action, 20)
+    sma50 = ta.SMA(price_action, 50)
+
+    # make start same for all sma
+    sma10 = sma10[-48:]
+    sma20 = sma20[-48:]
+    sma50 = sma50[-48:]
+
+    # find the most recent value where sma10>sma20>sma30
+    for i in reversed(range(len(sma10))):
+        if sma10[i] > sma20[i] and sma10[i] > sma50[i] and sma20[i] > sma50[i]:
+            return "uptrend"
+        elif sma10[i] < sma20[i] and sma10[i] < sma50[i] and sma20[i] < sma50[i]:
+            return "downtrend"
+    # if none of above conditions match, trend is consolidated
+    return "consolidated" 
+
+   
 def __body(open, close):
     return abs(open-close)
 

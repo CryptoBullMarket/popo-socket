@@ -37,7 +37,7 @@ def three_black_crows(key, dataList, time_frame):
                  and __small_lower_wick(price_action.iloc[-2]) \
                  and __small_lower_wick(price_action.iloc[-3])
 
-    # find trend for candles from -17 to -3, extra window_size data for sma buffer
+    # find trend for candles from -17 to -3, extra window_size data for ema buffer
     trend = utils.__uptrend(price_action.iloc[-2*window_size - 3:-3][id.close].values, window_size)
 
     # check strategy

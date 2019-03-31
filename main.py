@@ -3,6 +3,7 @@ from websocket_server import WebsocketServer
 from StrategyMain import examine_strategies
 from threading import Thread
 from time import time, sleep
+from trend import evaluate_trend
 import websocket
 import sched
 import json
@@ -10,6 +11,7 @@ from flask import Flask, jsonify, Response
 
 
 strategyDict = {}
+trendDict = {}
 scheduler = sched.scheduler(time, sleep)
 
 class PopoServer(Thread):
@@ -32,13 +34,15 @@ class PopoServer(Thread):
         print("Client(%d) said: %s" % (client['id'], message))
 
     def broadcast(self):
-        strategyList = []
-        self.format(strategyList)
+        finalList = []
+        self.format(finalList)
         self.broadcast_counter += 1
         print('Broadcast number: ', self.broadcast_counter)
-        self.all = self.server.send_message_to_all(json.dumps(strategyList))
+        self.all = self.server.send_message_to_all(json.dumps(finalList))
 
-    def format(self, strategyList):
+    def format(self, finalList):
+        # get all strategy data
+        strategyComb = []
         for key, value in strategyDict.items():
             strategy = {}
             data = []
@@ -57,9 +61,11 @@ class PopoServer(Thread):
             strategy[id.data] = data
             strategyList.append(strategy)
         #print('done')
+        strategyComb['strategy'] = strategyList
+        finalList.append(strategyComb)
 
     def run(self):
-        self.server = WebsocketServer(host=constants.server[id.host], port=constants.server[id.port])
+        self.server = WebsocketServer(host=constants.server[id.host], port=9006) #constants.server[id.port])
         self.server.set_fn_new_client(self.new_client)
         self.server.set_fn_client_left(self.client_left)
         self.server.set_fn_message_received(self.message_received)
@@ -92,7 +98,7 @@ class BitfinexClient(Thread):
                         append = False
                 if append:
                     strategyDict[strategy].append({key: value[strategy][id.price_action]})
-        self.popoServer.broadcast()
+        #self.popoServer.broadcast()
         #print('Works')
 
     def on_message(self, message):
@@ -145,6 +151,9 @@ class BitfinexClient(Thread):
                 strategies = examine_strategies(key, time_frame, self.candleData[chanId])
                 if strategies:
                     self.update_strategy_list(self.channelKeys[chanId], strategies)
+                # identify trend
+                trend = evaluate_trend(self.candleData[chanId])
+                print(trend)
 
     def on_error(self, error):
         print(error)
@@ -195,7 +204,7 @@ class FlaskAppWrapper(object):
         self.app = Flask(name)
 
     def run(self):
-        self.app.run(port= 4000)
+        self.app.run(port= 4001)
 
     def add_endpoint(self, endpoint=None, endpoint_name=None, handler=None):
         self.app.add_url_rule(endpoint, endpoint_name, EndpointAction(handler))
