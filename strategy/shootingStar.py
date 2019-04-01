@@ -22,8 +22,7 @@ def shooting_star(key, dataList, time_frame):
             #db.insert_strategy(key, time_frame, values.shooting_star, price_action.iloc[-1][id.time])
             return {
                 id.name: id.shooting_star,
-                id.key: key,
-                id.price_action: dataList
+                id.key: key
             }
         except:
             print('Unable to add to database')

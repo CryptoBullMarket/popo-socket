@@ -1,13 +1,9 @@
 from strategy import threeBlackCrows as tbc, doubleTopDoubleBottom as dtdb, threeWhiteSoldiers as tws, bullishAbandonedBaby as bab, eveningStar as es, morningStar as ms, shootingStar as ss
 from res import id as id
 
-def examine_strategies(key, time_frame, data):
+def examine_strategies(key, time_frame, dataList):
     print(key, time_frame)
-    dataList = []
     strategyList = []
-    for x in data:
-        for k, v in x.items():
-            dataList.append(v)
 
     TBC = tbc.three_black_crows(key, dataList, time_frame)
     if TBC:

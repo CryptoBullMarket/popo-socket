@@ -73,8 +73,7 @@ def double_top_double_bottom(key, dataList, time_frame):
             #db.insert_strategy(key, time_frame, values.double_top, price_action.iloc[-1][id.time])
             return {
                 id.name: id.double_top,
-                id.key: key,
-                id.price_action: dataList
+                id.key: key
             }
         except:
             print('Unable to add to database')
@@ -85,8 +84,7 @@ def double_top_double_bottom(key, dataList, time_frame):
             #db.insert_strategy(key, time_frame, values.double_bottom, price_action.iloc[-1][id.time])
             return {
                 id.name: id.double_bottom,
-                id.key: key,
-                id.price_action: dataList
+                id.key: key
             }
         except:
             print('Unable to add to database')

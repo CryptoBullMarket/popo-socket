@@ -44,8 +44,7 @@ def three_white_soldiers(key, dataList, time_frame):
             #db.insert_strategy(key, time_frame, values.three_white_soldiers, price_action.iloc[-1][id.time])
             return {
                 id.name: id.three_white_soldiers,
-                id.key: key,
-                id.price_action: dataList
+                id.key: key
             }
         except:
             print('Unable to add to database')

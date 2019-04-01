@@ -31,12 +31,14 @@ trend_strength = 'trend_strength'
 symbols = 'symbols'
 event = 'event'
 error = 'error'
+data = 'Data'
 
 # time frame
 tf_string = 'tf_string'
 tf_milli = 'tf_milli'
 
 # strategy id
+strategies = 'Strategies'
 three_black_crow = 'Three Black Crows'
 double_top = 'Double Top'
 double_bottom = 'Double Bottom'
@@ -71,3 +73,9 @@ priority = 'priority'
 
 host = 'host'
 port = 'port'
+
+#Trends
+uptTend = 'Uptrend'
+downTrend = 'Downtrend'
+consol = 'Consolidated'
+trend = 'Trend'

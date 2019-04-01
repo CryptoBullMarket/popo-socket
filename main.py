@@ -10,7 +10,7 @@ import json
 from flask import Flask, jsonify, Response
 
 
-strategyDict = {}
+dataPacket = {}
 trendDict = {}
 scheduler = sched.scheduler(time, sleep)
 
@@ -34,16 +34,16 @@ class PopoServer(Thread):
         print("Client(%d) said: %s" % (client['id'], message))
 
     def broadcast(self):
-        finalList = []
-        self.format(finalList)
+        #finalList = []
+        #self.format(finalList)
         self.broadcast_counter += 1
         print('Broadcast number: ', self.broadcast_counter)
-        self.all = self.server.send_message_to_all(json.dumps(finalList))
+        self.all = self.server.send_message_to_all(json.dumps(dataPacket))
 
     def format(self, finalList):
         # get all strategy data
         strategyComb = []
-        for key, value in strategyDict.items():
+        for key, value in dataPacket.items():
             strategy = {}
             data = []
             strategy[id.name] = key
@@ -59,9 +59,9 @@ class PopoServer(Thread):
                     dataInner[id.data] = value2
                 data.append(dataInner)
             strategy[id.data] = data
-            strategyList.append(strategy)
+            finalList.append(strategy)
         #print('done')
-        strategyComb['strategy'] = strategyList
+        strategyComb['strategy'] = finalList
         finalList.append(strategyComb)
 
     def run(self):
@@ -86,8 +86,27 @@ class BitfinexClient(Thread):
         for i in range(0, no_removed):
             del self.candleData[chanId][i]
 
-    def update_strategy_list(self, key, strategies):
-        append = True
+    def update_strategy_list(self, key, trend, dataList, strategies = None):
+        if key in dataPacket:
+            dataPacket[key][id.trend] = trend
+            dataPacket[key][id.data] = dataList
+            if strategies:
+                for s in strategies:
+                    strat_name = list(s.keys())[0]
+                    if strat_name not in dataPacket[key][id.strategies]:
+                        dataPacket[key][id.strategies].append(strat_name)
+        else:
+            if strategies:
+                strat = []
+                for s in strategies:
+                    strat.append(list(s.keys())[0])
+            else:
+                strat = []
+            dataPacket[key] = {id.strategies: strat,
+                               id.trend: trend,
+                                id.data: dataList}
+        self.popoServer.broadcast()
+        '''append = True
         for value in strategies:
             strategy = list(value)[0]
             if strategy not in strategyDict:
@@ -99,7 +118,7 @@ class BitfinexClient(Thread):
                 if append:
                     strategyDict[strategy].append({key: value[strategy][id.price_action]})
         #self.popoServer.broadcast()
-        #print('Works')
+        #print('Works')'''
 
     def on_message(self, message):
         newMessage = json.loads(message)
@@ -148,11 +167,18 @@ class BitfinexClient(Thread):
                 chanKey = self.channelKeys[chanId].split(':')
                 time_frame = chanKey[1]
                 key = chanKey[2][1:]
-                strategies = examine_strategies(key, time_frame, self.candleData[chanId])
+                dataList = []
+                for x in self.candleData[chanId]:
+                    for k, v in x.items():
+                        dataList.append(v)
+                strategies = examine_strategies(key, time_frame, dataList)
+                trend = evaluate_trend(dataList)
                 if strategies:
-                    self.update_strategy_list(self.channelKeys[chanId], strategies)
+                    self.update_strategy_list(self.channelKeys[chanId], trend, dataList, strategies)
+                else:
+                    self.update_strategy_list(self.channelKeys[chanId], trend, dataList)
                 # identify trend
-                trend = evaluate_trend(self.candleData[chanId])
+
                 print(trend)
 
     def on_error(self, error):

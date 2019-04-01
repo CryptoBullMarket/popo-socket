@@ -25,8 +25,7 @@ def evening_star(key, dataList, time_frame):
             #db.insert_strategy(key, time_frame, values.evening_star, price_action.iloc[-1][id.time])
             return {
                 id.name: id.evening_star,
-                id.key: key,
-                id.price_action: dataList
+                id.key: key
             }
         except:
             print('Unable to add to database')

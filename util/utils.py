@@ -29,11 +29,11 @@ def __sma_trend(price_action):
     # find the most recent value where sma10>sma20>sma30
     for i in reversed(range(len(sma10))):
         if sma10[i] > sma20[i] and sma10[i] > sma50[i] and sma20[i] > sma50[i]:
-            return "uptrend"
+            return id.uptTend
         elif sma10[i] < sma20[i] and sma10[i] < sma50[i] and sma20[i] < sma50[i]:
-            return "downtrend"
+            return id.downTrend
     # if none of above conditions match, trend is consolidated
-    return "consolidated" 
+    return id.consol
 
    
 def __body(open, close):
